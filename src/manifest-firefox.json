@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "version": "2021.1",
+  "name": "Refined LinkedIn Feed",
+  "description": "Customize your LinkedIn experience by filtering out certain activity types from the newsfeed.",
+  "author": "Mustapha Hadid",
+  "homepage_url": "https://github.com/mhadidg/refined-linkedin-feed",
+  "permissions": ["storage"],
+  "web_accessible_resources": ["*.html"],
+  "icons": {
+    "128": "icons/128x128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "linkedin-feed-filter@mhadidg"
+    }
+  },
+  "background": {
+    "scripts": ["js/lib/browser-polyfill.js", "js/background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["js/lib/browser-polyfill.js", "js/utils.js", "js/content.js"],
+      "css": ["css/panel.css"]
+    }
+  ]
+}
