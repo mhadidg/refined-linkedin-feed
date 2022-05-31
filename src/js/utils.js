@@ -1,7 +1,8 @@
-"use strict";
+'use strict';
 
 const Regex = Object.freeze({
-  CONNECTION_REACTION: /(like(s)?|celebrate(s)?|support(s)?|love(s)?|find(s)?|reacted to|curious about) this/i,
+  CONNECTION_REACTION:
+    /(like(s)?|celebrate(s)?|support(s)?|love(s)?|find(s)?|reacted to|curious about) this/i,
   CONNECTION_COMMENT: /commented on this/i,
   CONNECTION_WORK_ANNIVERSARY: /work anniversary/i,
   CONNECTION_JOB_UPDATE: /job update/i,
@@ -14,26 +15,26 @@ const Regex = Object.freeze({
 });
 
 const ActivityType = Object.freeze({
-  CONNECTION_POST: "connection_post",
-  CONNECTION_SHARE: "connection_share",
-  CONNECTION_COMMENT: "connection_comment",
-  CONNECTION_REACTION: "connection_reaction",
-  CONNECTION_WORK_ANNIVERSARY: "connection_work_anniversary",
-  CONNECTION_JOB_UPDATE: "connection_job_update",
-  FOLLOWEE_POST: "followee_post",
-  FOLLOWEE_COMMENT: "followee_comment",
-  GROUP_POST: "group_post",
-  PROMOTED_POST: "promoted_post",
-  JOB_RECOMMENDATION: "job_recommendation",
-  UNKNOWN: "unknown"
+  CONNECTION_POST: 'connection_post',
+  CONNECTION_SHARE: 'connection_share',
+  CONNECTION_COMMENT: 'connection_comment',
+  CONNECTION_REACTION: 'connection_reaction',
+  CONNECTION_WORK_ANNIVERSARY: 'connection_work_anniversary',
+  CONNECTION_JOB_UPDATE: 'connection_job_update',
+  FOLLOWEE_POST: 'followee_post',
+  FOLLOWEE_COMMENT: 'followee_comment',
+  GROUP_POST: 'group_post',
+  PROMOTED_POST: 'promoted_post',
+  JOB_RECOMMENDATION: 'job_recommendation',
+  UNKNOWN: 'unknown',
 });
 
 const ActivitySelector = Object.freeze({
-  HEADER: ".feed-shared-header",
-  NESTED_ACTIVITY: ".feed-shared-mini-update-v2",
+  HEADER: '.feed-shared-header',
+  NESTED_ACTIVITY: '.feed-shared-mini-update-v2',
   ACTOR: "[data-urn^='urn:li:activity'] > div > .feed-shared-actor",
-  ACTOR_WITH_CTRL_MENU: ".feed-shared-actor--with-control-menu",
-  COMMENTER: ".comments-comment-item__post-meta",
+  ACTOR_WITH_CTRL_MENU: '.feed-shared-actor--with-control-menu',
+  COMMENTER: '.comments-comment-item__post-meta',
 });
 
 /**
@@ -57,8 +58,7 @@ function hasHeader(activity) {
 }
 
 /**
- * Determines whether a feed activity has an author panel with
- * control menu.
+ * Determines whether a feed activity has an author panel with control menu.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
@@ -68,8 +68,8 @@ function hasActorWithControlMenu(activity) {
 }
 
 /**
- * Determines whether the text of commenter section within a
- * feed activity matches a regular expression object.
+ * Determines whether the text of commenter section within a feed
+ * activity matches a regular expression object.
  *
  * @param {Element} activity - An element of feed activity.
  * @param {string} regexp - A regular expression object.
@@ -85,8 +85,8 @@ function doesCommenterMatch(activity, regexp) {
 }
 
 /**
- * Determines whether the text of header panel within a feed
- * activity matches a regular expression object.
+ * Determines whether the text of header panel within a feed activity
+ * matches a regular expression object.
  *
  * @param {Element} activity - An element of feed activity.
  * @param {string} regexp - A regular expression object.
@@ -119,8 +119,7 @@ function doesActorMatch(activity, regexp) {
 }
 
 /**
- * Determines whether a feed activity is of type reaction
- * activity.
+ * Determines whether a feed activity is of type reaction activity.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
@@ -130,68 +129,69 @@ function isReaction(activity) {
 }
 
 /**
- * Determines whether a feed activity is of type comment from
- * a connection only.
+ * Determines whether a feed activity is of type comment from a connection only.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
  */
 function isConnectionComment(activity) {
-  return doesHeaderMatches(activity, Regex.CONNECTION_COMMENT)
-      && !(
-          doesCommenterMatch(activity, Regex.FOLLOWEE_POST)
-          || doesActorMatch(activity, Regex.FOLLOWEE_MEMBER_POST)
-      );
+  return (
+    doesHeaderMatches(activity, Regex.CONNECTION_COMMENT) &&
+    !(
+      doesCommenterMatch(activity, Regex.FOLLOWEE_POST) ||
+      doesActorMatch(activity, Regex.FOLLOWEE_MEMBER_POST)
+    )
+  );
 }
 
 /**
- * Determines whether a feed activity is of type comment from
- * a followee only.
+ * Determines whether a feed activity is of type comment from a followee only.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
  */
 function isFolloweeComment(activity) {
-  return doesHeaderMatches(activity, Regex.CONNECTION_COMMENT)
-      && (
-          doesCommenterMatch(activity, Regex.FOLLOWEE_POST)
-          || doesActorMatch(activity, Regex.FOLLOWEE_MEMBER_POST)
-      );
+  return (
+    doesHeaderMatches(activity, Regex.CONNECTION_COMMENT) &&
+    (doesCommenterMatch(activity, Regex.FOLLOWEE_POST) ||
+      doesActorMatch(activity, Regex.FOLLOWEE_MEMBER_POST))
+  );
 }
 
 /**
- * Determines whether a feed activity is of type post from
- * a connection only.
+ * Determines whether a feed activity is of type post from a connection only.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
  */
 function isConnectionPost(activity) {
-  return hasActorWithControlMenu(activity)
-      && !(
-          isFolloweePost(activity)
-          || isPromotedPost(activity)
-          || isGroupPost(activity)
-          || isSharedPost(activity)
-      );
+  return (
+    hasActorWithControlMenu(activity) &&
+    !(
+      isFolloweePost(activity) ||
+      isPromotedPost(activity) ||
+      isGroupPost(activity) ||
+      isSharedPost(activity)
+    )
+  );
 }
 
 /**
- * Determines whether a feed activity is of type post from
- * a followee only.
+ * Determines whether a feed activity is of type post from a followee only.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
  */
 function isFolloweePost(activity) {
-  return hasActorWithControlMenu(activity)
-      && doesActorMatch(activity, Regex.FOLLOWEE_POST)
-      && !isPromotedPost(activity);
+  return (
+    hasActorWithControlMenu(activity) &&
+    doesActorMatch(activity, Regex.FOLLOWEE_POST) &&
+    !isPromotedPost(activity)
+  );
 }
 
 /**
- * Determines whether a feed activity is of type post from
- * a group only.
+ * Determines whether a feed activity is of type post from a group only.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
@@ -201,8 +201,7 @@ function isGroupPost(activity) {
 }
 
 /**
- * Determines whether a feed activity is of type promotional
- * post.
+ * Determines whether a feed activity is of type promotional post.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
@@ -218,9 +217,11 @@ function isPromotedPost(activity) {
  * @returns {boolean}
  */
 function isSharedPost(activity) {
-  return hasActorWithControlMenu(activity)
-      && hasNestedPost(activity)
-      && !hasHeader(activity);
+  return (
+    hasActorWithControlMenu(activity) &&
+    hasNestedPost(activity) &&
+    !hasHeader(activity)
+  );
 }
 
 /**
@@ -234,8 +235,7 @@ function isWorkAnniversary(activity) {
 }
 
 /**
- * Determines whether a feed activity is of type job update
- * of a connection.
+ * Determines whether a feed activity is of type job update of a connection.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {boolean}
@@ -255,7 +255,7 @@ function isJobRecommendation(activity) {
 }
 
 /**
- * Determines the type of a feed activity.
+ * Determines the type of feed activity.
  *
  * @param {Element} activity - An element of feed activity.
  * @returns {string} - A string identifies an activity type.
@@ -291,13 +291,13 @@ function inferActivityType(activity) {
 /**
  * Await until an element exists in the DOM.
  *
- * @see https://stackoverflow.com/q/16149431/5631308
  * @param {string} selector - A CSS selector to match against document.
  * @returns {Element} - An element matching the selector.
+ * @see https://stackoverflow.com/q/16149431/5631308
  */
 async function untilElementExists(selector) {
   while (!document.querySelector(selector)) {
-    await new Promise(it => setTimeout(it, 50));
+    await new Promise((it) => setTimeout(it, 50));
   }
 
   return document.querySelector(selector);
@@ -306,10 +306,12 @@ async function untilElementExists(selector) {
 /**
  * Execute a callback function when browser address bar changes.
  *
+ * @param {function} callback - A callback function with
+ *   {@link window.location} parameter.
+ * @returns {number} - A number identifies the timer created by the
+ *   call to setInterval(). This value can be passed to
+ *   clearInterval() to cancel the interval.
  * @see https://stackoverflow.com/q/1930927/5631308
- * @param {function} callback - A callback function with {@link window.location} parameter.
- * @returns {number} - A number identifies the timer created by the call to setInterval().
- *                     This value can be passed to clearInterval() to cancel the interval.
  */
 function onAddressBarChanges(callback) {
   let href = window.location.href;

@@ -2,8 +2,10 @@
   "name": "linkedin-feed-filter",
   "type": "module",
   "scripts": {
-    "test": "jest",
-    "build": "web-ext lint -s src && web-ext build -s src -a artifacts"
+    "build": "web-ext lint -s src && web-ext build -s src -a artifacts",
+    "test": "jest -i --colors --verbose --setupFiles dotenv/config",
+    "prettier": "prettier --check **/*.{js,ts,json}",
+    "prettier:fix": "prettier --write **/*.{js,ts,json}"
   },
   "jest": {
     "rootDir": "test",
@@ -15,6 +17,8 @@
     "expect-puppeteer": "^5.0.4",
     "jest": "^27.0.6",
     "jest-puppeteer": "^5.0.4",
+    "prettier": "^2.6.2",
+    "prettier-plugin-jsdoc": "^0.3.38",
     "puppeteer": "^10.1.0",
     "web-ext": "^6.2.0"
   }

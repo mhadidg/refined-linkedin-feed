@@ -1,0 +1,7 @@
+printWidth: 80
+singleQuote: true
+trailingComma: all
+jsdocPrintWidth: 70
+
+plugins:
+  - prettier-plugin-jsdoc
