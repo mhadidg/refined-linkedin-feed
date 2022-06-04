@@ -2,7 +2,8 @@
   "name": "linkedin-feed-filter",
   "type": "module",
   "scripts": {
-    "build": "web-ext lint -s src && web-ext build -s src -a artifacts",
+    "lint": "web-ext lint --config=webext.config.cjs",
+    "build": "web-ext build --config=webext.config.cjs -a artifacts",
     "test": "jest -i --colors --verbose --setupFiles dotenv/config",
     "prettier": "prettier --check **/*.{js,ts,json}",
     "prettier:fix": "prettier --write **/*.{js,ts,json}"
