@@ -1,6 +1,5 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
-const expect = require('expect-puppeteer');
 
 /**
  * To execute this test script, environment variables for LinkedIn
@@ -30,7 +29,7 @@ beforeAll(async () => {
   await page.type('#password', process.env.IN_PASSWORD);
   await Promise.all([
     page.waitForNavigation(),
-    page.click("button[type='submit']"),
+    page.click('button[type=\'submit\']'),
   ]);
 
   await page.close();
@@ -53,7 +52,7 @@ describe('Accessing newsfeed', () => {
     await page.goto('https://linkedin.com/in/williamhgates');
     await Promise.all([
       page.waitForNavigation(),
-      page.click("a[href='/feed/']"),
+      page.click('a[href=\'/feed/\']'),
     ]);
 
     await expect(page).toMatchElement('#filter-panel', { timeout: 5000 });
